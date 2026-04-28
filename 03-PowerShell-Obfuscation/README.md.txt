@@ -60,7 +60,7 @@ Repository Contents
 - Screenshots – All captured screenshots
 
 Project Links
-GitHub Repository: https://github.com/Mubashir-soc-01/Project-01-Reverse-Shell/tree/main/Project-05-PowerShell-Obfuscation
+GitHub Repository: https://github.com/Mubashir-soc-01
 LinkedIn Profile: https://www.linkedin.com/in/mohammad-mubashir-b729643b7/
 
 Project by: Mohammad Mubashir
