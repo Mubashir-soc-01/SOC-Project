@@ -1,0 +1,68 @@
+PHISHING EMAIL ANALYSIS & IOC EXTRACTION – COMMANDS I USED
+
+Date: 31 March 2026
+Environment: Windows 11
+Tools Used: Notepad, MxToolbox, VirusTotal
+
+
+PHASE 1 – CREATE PHISHING EMAIL
+
+1. CREATE EMAIL CONTENT
+From: security@paypal-support.com
+To: victim@company.com
+Subject: URGENT: Your PayPal Account Has Been Limited
+
+Dear Customer,
+
+We noticed unusual activity on your PayPal account.
+To avoid permanent suspension, please verify your account immediately.
+
+Click here to verify: http://paypal-security-verify.com/login
+
+If you do not verify within 24 hours, your account will be permanently suspended.
+
+Thank you,
+PayPal Security Team
+
+2. SAVE AS .EML FILE
+File name: phishing-sample.eml
+Save as type: All Files (*.*)
+
+
+PHASE 2 – EXTRACT & ANALYZE HEADERS
+
+3. OPEN .EML IN NOTEPAD
+Right-click phishing-sample.eml → Open with → Notepad
+
+4. COPY RAW HEADERS
+Ctrl + A
+Ctrl + C
+
+5. ANALYZE WITH MXTOOLBOX
+Browser: https://mxtoolbox.com/EmailHeaders.aspx
+Ctrl + V
+Click "Analyze Headers"
+
+
+PHASE 3 – IP REPUTATION CHECK
+
+6. VIRUSTOTAL IP ANALYSIS
+Browser: https://www.virustotal.com/gui/home/url
+Search: 103.212.145.221
+
+
+IOCs EXTRACTED
+
+Sender Email: security@paypal-support.com
+Suspicious Domain: paypal-support.com
+Phishing URL: http://paypal-security-verify.com/login
+Malicious IP: 103.212.145.221
+
+
+WHAT I LEARNED
+
+- .eml files can be opened in Notepad to view raw headers
+- MxToolbox helps analyze email headers
+- VirusTotal checks IP/URL reputation
+- Fake sender domain & urgency tactics are key phishing indicators
+- Always verify link destinations before clicking
