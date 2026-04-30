@@ -1,0 +1,81 @@
+SIEM ALERT TRIAGE WORKFLOW – COMMANDS I USED
+
+Date: March 2026
+Environment: Windows 11, Kali Linux
+Tools Used: Splunk, Crowbar, Hydra, Event Viewer, Notepad
+
+
+PHASE 1 – GENERATE RDP BRUTE FORCE ATTACK (Kali Linux)
+
+1. CREATE USER LIST
+echo -e "testuser\ntestuser01" > users.txt
+
+2. FIX WORDLIST ENCODING
+sudo iconv -f ISO-8859-1 -t UTF-8 /usr/share/wordlists/rockyou.txt -o /usr/share/wordlists/rockyou-utf8.txt
+
+3. RDP BRUTE FORCE WITH CROWBAR
+crowbar -b rdp -s 192.168.1.34/32 -u testuser -C /usr/share/wordlists/rockyou-utf8.txt -v
+
+4. RDP BRUTE FORCE WITH HYDRA (ALTERNATIVE)
+hydra -l testuser -P /usr/share/wordlists/rockyou.txt rdp://192.168.1.34 -t 1 -w 5 -V
+
+Note: Attack stopped early due to high CPU usage. Enough failed logins generated.
+
+
+PHASE 2 – VERIFY FAILED LOGINS IN WINDOWS (Windows 11)
+
+5. CHECK EVENT VIEWER FOR FAILED LOGINS
+Event Viewer → Windows Logs → Security → Filter Event ID 4625
+
+
+PHASE 3 – ADD WINDOWS LOGS TO SPLUNK
+
+6. ADD DATA IN SPLUNK
+Splunk Web → Settings → Add Data → Monitor → Local Event Logs → Security
+Source type: WinEventLog:Security
+Index: main
+
+7. SEARCH FAILED LOGINS IN SPLUNK
+index=main sourcetype=WinEventLog:Security EventCode=4625
+
+8. SEARCH SUCCESSFUL RDP LOGINS
+index=main sourcetype=WinEventLog:Security EventCode=4624 Logon_Type=10
+
+
+PHASE 4 – CREATE ALERT RULE
+
+9. SAVE SEARCH AS ALERT
+Click Save As → Alert
+Title: RDP Brute Force Detected
+Description: More than 5 failed RDP logins in 15 minutes
+Alert Type: Scheduled
+Run every: Hourly at 15 minutes past the hour
+Trigger Condition: Number of Results > 5
+Action: Add to Triggered Alerts (Severity: Medium)
+
+
+PHASE 5 – VERIFY ALERT
+
+10. CHECK TRIGGERED ALERTS
+Splunk Web → Activity → Triggered Alerts
+
+
+IOCs EXTRACTED
+
+Source IP: 192.168.1.43 (Kali Linux)
+Target IP: 192.168.1.34 (Windows 11)
+Event ID: 4625 (Failed login)
+Event ID: 4624 (Successful login)
+Username: testuser
+Logon Type: 10 (RDP)
+Status Code: 0xc000006d (Wrong password)
+
+
+WHAT I LEARNED
+
+- Hydra RDP module is unstable; Crowbar works better for RDP brute force
+- Wordlist encoding issues can be fixed with iconv
+- Windows Security Logs need to be added manually in Splunk
+- Event ID 4625 indicates failed login attempts
+- Alert rules in Splunk help automate detection
+- Always add at least one action (e.g., Triggered Alerts) when saving alert
