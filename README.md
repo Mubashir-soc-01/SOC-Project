@@ -21,7 +21,7 @@ This repository contains my SOC L1 projects. Each project includes attack simula
 
 ## PROJECT 2 – RDP BRUTE FORCE
 **What I did:**
-- Ran RDP brute force from Kali using Hydra and Crowbar
+- Run RDP brute force from Kali using Hydra and Crowbar
 - Checked failed logins in Windows Event Log (Event ID 4625)
 - Found successful login (Event ID 4624, Logon Type 10)
 
