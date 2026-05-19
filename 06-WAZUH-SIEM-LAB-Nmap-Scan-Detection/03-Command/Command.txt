@@ -1,0 +1,32 @@
+Wazuh SIEM Lab - Commands Reference
+
+Wazuh Server Installation (CentOS)
+curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh && sudo bash wazuh-install.sh -a -i
+
+Wazuh Services Start
+sudo systemctl start wazuh-manager
+sudo systemctl start wazuh-dashboard
+sudo systemctl start wazuh-indexer
+
+Firewall Ports Open
+sudo firewall-cmd --permanent --add-port=443/tcp
+sudo firewall-cmd --permanent --add-port=1514/tcp
+sudo firewall-cmd --permanent --add-port=1515/tcp
+sudo firewall-cmd --reload
+
+IP Address Check
+ip a
+
+Wazuh Agent Installation on Kali Linux
+wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.5-1_amd64.deb && sudo WAZUH_MANAGER='192.168.1.59' WAZUH_AGENT_NAME='kali-agent' dpkg -i ./wazuh-agent_4.7.5-1_amd64.deb
+
+Agent Start
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+sudo systemctl status wazuh-agent
+
+Nmap Scan
+sudo su
+nmap -sT 192.168.1.59
+nmap -sV 192.168.1.59
