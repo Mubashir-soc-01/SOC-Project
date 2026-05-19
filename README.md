@@ -6,7 +6,9 @@ This repository contains my SOC L1 projects. Each project includes attack simula
 - Kali Linux (attacker)
 - Windows 11 (victim + SIEM)
 - Ubuntu Server (logs source)
+- CentOS Stream (Wazuh Server)
 - Splunk (SIEM)
+- Wazuh SIEM (security monitoring)
 - Wireshark (network capture)
 
 ## PROJECT 1 – REVERSE SHELL ATTACK
@@ -58,11 +60,22 @@ This repository contains my SOC L1 projects. Each project includes attack simula
 
 **Tools:** Kali, Hydra, Crowbar, Windows 11, Splunk, Event Viewer
 
+## PROJECT 6 – WAZUH SIEM LAB – NMAP SCAN DETECTION
+**What I did:**
+- Installed Wazuh SIEM on CentOS Stream VM
+- Deployed Wazuh Agent on Kali Linux
+- Connected agent to Wazuh Server
+- Performed Nmap TCP scan from Kali targeting CentOS
+- Detected scan activity in Wazuh Security Events dashboard
+- Identified 4 Indicators of Compromise (IOCs)
+
+**Tools:** Wazuh SIEM, CentOS Stream, Kali Linux, Windows 11, Nmap, VirtualBox
+
 ## SKILLS I LEARNED
-- Attack simulation (reverse shell, RDP brute force, obfuscation)
+- Attack simulation (reverse shell, RDP brute force, obfuscation, network scanning)
 - Log analysis (Windows Event Logs, Linux auth.log, syslog)
 - Network traffic analysis with Wireshark
-- SIEM operations with Splunk
+- SIEM operations with Splunk and Wazuh
 - Phishing email analysis and header inspection
 - IOC extraction and documentation
 - Technical report writing
@@ -73,10 +86,10 @@ This repository contains my SOC L1 projects. Each project includes attack simula
 - screenshots/ (all screenshots)
 
 ## GITHUB
-https://github.com/mubashir-acc-01/SOC-Project
+https://github.com/Mubashir-soc-01/SOC-Project
 
 ## LINKEDIN
-https://www.linkedin.com/in/mohammad-mubashir
+https://www.linkedin.com/in/mohammad-mubashir-b729643b7/
 
-**Project by:** Mohammad Mubashir  
-**Date:** 6 May 2026
+**Project by:** Mohammad Mubashir
+**Date:** 19 May 2026
